@@ -14,9 +14,75 @@
       background: #fdf6ec;
       color: #4a3728;
       overflow-x: hidden;
+      transition: background 0.6s, color 0.6s;
     }
 
-    /* ── Hero ── */
+    /* ══ Night Mode ══ */
+    body.night-mode {
+      background: #1a1a2e;
+      color: #e0d5c7;
+    }
+    body.night-mode .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    }
+    body.night-mode .hero::before {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,100,0.05) 0%, transparent 30%),
+        radial-gradient(circle at 80% 70%, rgba(100,100,255,0.05) 0%, transparent 30%);
+    }
+    body.night-mode .hero .subtitle { color: #a0a0c0; }
+    body.night-mode .hero .breed { background: rgba(255,255,255,0.1); color: #c0b090; border-color: rgba(255,255,255,0.1); }
+    body.night-mode .scroll-hint { color: #606080; }
+    body.night-mode .profile-card { background: #22223b; border-color: rgba(255,255,255,0.05); }
+    body.night-mode .profile-item { background: #2a2a4a; }
+    body.night-mode .profile-label { color: #8888aa; }
+    body.night-mode .facts-section { background: linear-gradient(180deg, #1a1a2e, #16213e); }
+    body.night-mode .fact-card { background: #22223b; border-color: rgba(255,255,255,0.05); }
+    body.night-mode .fact-desc { color: #9090a0; }
+    body.night-mode .love-section { background: linear-gradient(135deg, #2a1a2e, #1a1a2e); }
+    body.night-mode .love-sub { color: #8080a0; }
+    body.night-mode .message-bubble { background: #22223b; border-color: rgba(255,255,255,0.08); }
+    body.night-mode .message-bubble::after { border-top-color: #22223b; }
+    body.night-mode .message-from { color: #7070a0; }
+    body.night-mode footer { background: #1a1a2e; color: #505070; }
+    body.night-mode .section-title::after { background: linear-gradient(90deg, #5050a0, #a050a0); }
+    body.night-mode .pet-counter { background: rgba(30,30,50,0.9); color: #ff8888; }
+
+    .night-toggle-indicator {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      font-size: 1.5rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .night-toggle-indicator.show { opacity: 1; }
+
+    /* Stars for night mode */
+    .stars-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    body.night-mode .stars-container { opacity: 1; }
+    .star {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 2s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.5); }
+    }
+
+    /* ══ Hero ══ */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -27,6 +93,7 @@
       text-align: center;
       background: linear-gradient(135deg, #ffe8cc 0%, #ffd6a5 40%, #ffccd5 100%);
       padding: 2rem;
+      transition: background 0.6s;
     }
 
     .hero::before {
@@ -36,6 +103,7 @@
       background:
         radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 0%, transparent 50%),
         radial-gradient(circle at 80% 20%, rgba(255,200,150,0.4) 0%, transparent 50%);
+      transition: background 0.6s;
     }
 
     .hero-content { position: relative; z-index: 1; }
@@ -61,6 +129,8 @@
       background-clip: text;
       line-height: 1.2;
       margin-bottom: 0.5rem;
+      cursor: pointer;
+      user-select: none;
     }
 
     .hero .subtitle {
@@ -68,6 +138,7 @@
       color: #8b6914;
       font-weight: 700;
       margin-bottom: 0.5rem;
+      transition: color 0.6s;
     }
 
     .hero .breed {
@@ -80,7 +151,11 @@
       color: #9b6b3e;
       border: 2px solid rgba(200,150,80,0.3);
       margin-bottom: 2rem;
+      cursor: pointer;
+      transition: all 0.3s;
     }
+
+    .breed:hover { transform: scale(1.05); }
 
     .dog-illustration {
       width: clamp(200px, 45vw, 320px);
@@ -94,7 +169,7 @@
       margin-bottom: 2rem;
       animation: float 3s ease-in-out infinite;
       cursor: pointer;
-      transition: box-shadow 0.3s;
+      transition: box-shadow 0.3s, filter 0.5s;
       position: relative;
     }
 
@@ -110,11 +185,44 @@
       height: 100%;
       object-fit: cover;
       object-position: center 15%;
+      transition: filter 0.5s;
     }
+
+    /* Photo filters */
+    .filter-sepia img { filter: sepia(100%); }
+    .filter-grayscale img { filter: grayscale(100%); }
+    .filter-hue img { filter: hue-rotate(180deg); }
+    .filter-saturate img { filter: saturate(3); }
+    .filter-invert img { filter: invert(100%); }
+    .filter-blur img { filter: blur(3px); }
+    .filter-none img { filter: none; }
 
     @keyframes float {
       0%, 100% { transform: translateY(0) rotate(0deg); }
       50% { transform: translateY(-15px) rotate(3deg); }
+    }
+
+    /* Sleep overlay */
+    .sleep-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,30,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      opacity: 0;
+      transition: opacity 0.8s;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .sleep-overlay.active { opacity: 1; }
+
+    .zzz { animation: zzzFloat 2s ease-in-out infinite; }
+    @keyframes zzzFloat {
+      0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.7; }
+      50% { transform: translateY(-20px) rotate(5deg); opacity: 1; }
     }
 
     .scroll-hint {
@@ -123,6 +231,7 @@
       font-size: 0.9rem;
       color: #b08040;
       animation: fadeUp 2s ease-in-out infinite;
+      transition: color 0.6s;
     }
 
     @keyframes fadeUp {
@@ -130,7 +239,7 @@
       50% { opacity: 1; transform: translateY(-8px); }
     }
 
-    /* ── Pet Counter ── */
+    /* ══ Pet Counter ══ */
     .pet-counter {
       position: fixed;
       top: 1rem;
@@ -146,7 +255,7 @@
       z-index: 1000;
       opacity: 0;
       transform: translateY(-20px);
-      transition: opacity 0.4s, transform 0.4s;
+      transition: opacity 0.4s, transform 0.4s, background 0.6s, color 0.6s;
       pointer-events: none;
     }
 
@@ -155,7 +264,7 @@
       transform: translateY(0);
     }
 
-    /* ── Floating Reaction ── */
+    /* ══ Floating Reaction ══ */
     .float-emoji {
       position: fixed;
       font-size: 2rem;
@@ -169,7 +278,7 @@
       100% { opacity: 0; transform: translateY(-120px) scale(1.5); }
     }
 
-    /* ── Pet Reaction Toast ── */
+    /* ══ Pet Reaction Toast ══ */
     .pet-toast {
       position: fixed;
       top: 50%;
@@ -186,6 +295,7 @@
       z-index: 2000;
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
       opacity: 0;
+      max-width: 90vw;
     }
 
     .pet-toast.show {
@@ -195,7 +305,7 @@
 
     .pet-toast .toast-emoji { font-size: 3rem; margin-bottom: 0.5rem; }
 
-    /* ── Section ── */
+    /* ══ Section ══ */
     section {
       max-width: 900px;
       margin: 0 auto;
@@ -218,15 +328,17 @@
       background: linear-gradient(90deg, #d4a76a, #e74c3c);
       border-radius: 2px;
       margin: 0.8rem auto 0;
+      transition: background 0.6s;
     }
 
-    /* ── Profile Card ── */
+    /* ══ Profile Card ══ */
     .profile-card {
       background: white;
       border-radius: 24px;
       padding: 2.5rem;
       box-shadow: 0 10px 40px rgba(0,0,0,0.06);
       border: 1px solid rgba(200,150,80,0.15);
+      transition: background 0.6s, border-color 0.6s;
     }
 
     .profile-grid {
@@ -242,17 +354,12 @@
       padding: 1rem;
       background: #fdf6ec;
       border-radius: 16px;
-      transition: transform 0.2s;
+      transition: transform 0.2s, background 0.6s;
     }
 
-    .profile-item:hover {
-      transform: translateY(-3px);
-    }
+    .profile-item:hover { transform: translateY(-3px); }
 
-    .profile-icon {
-      font-size: 2rem;
-      flex-shrink: 0;
-    }
+    .profile-icon { font-size: 2rem; flex-shrink: 0; }
 
     .profile-label {
       font-size: 0.8rem;
@@ -260,6 +367,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      transition: color 0.6s;
     }
 
     .profile-value {
@@ -268,9 +376,10 @@
       margin-top: 0.2rem;
     }
 
-    /* ── Fun Facts ── */
+    /* ══ Fun Facts ══ */
     .facts-section {
       background: linear-gradient(180deg, #fdf6ec 0%, #fff5e6 100%);
+      transition: background 0.6s;
     }
 
     .facts-grid {
@@ -286,7 +395,7 @@
       text-align: center;
       box-shadow: 0 8px 30px rgba(0,0,0,0.05);
       border: 1px solid rgba(200,150,80,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.6s, border-color 0.6s;
       cursor: pointer;
       user-select: none;
     }
@@ -296,28 +405,18 @@
       box-shadow: 0 15px 40px rgba(0,0,0,0.1);
     }
 
-    .fact-emoji {
-      font-size: 3.5rem;
-      margin-bottom: 1rem;
-    }
+    .fact-emoji { font-size: 3.5rem; margin-bottom: 1rem; }
 
-    .fact-title {
-      font-size: 1.2rem;
-      font-weight: 900;
-      margin-bottom: 0.5rem;
-    }
+    .fact-title { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.5rem; }
 
-    .fact-desc {
-      font-size: 0.95rem;
-      color: #7a6048;
-      line-height: 1.7;
-    }
+    .fact-desc { font-size: 0.95rem; color: #7a6048; line-height: 1.7; transition: color 0.6s; }
 
-    /* ── Love Section ── */
+    /* ══ Love Section ══ */
     .love-section {
       text-align: center;
       background: linear-gradient(135deg, #fff0f3 0%, #ffe8cc 100%);
       padding: 5rem 2rem;
+      transition: background 0.6s;
     }
 
     .love-big-emoji {
@@ -351,9 +450,10 @@
       font-size: 1.1rem;
       color: #8b6914;
       line-height: 1.8;
+      transition: color 0.6s;
     }
 
-    /* ── Message ── */
+    /* ══ Message ══ */
     .message-section {
       text-align: center;
       padding: 5rem 2rem;
@@ -368,6 +468,7 @@
       border: 2px solid rgba(200,150,80,0.15);
       max-width: 600px;
       position: relative;
+      transition: background 0.6s, border-color 0.6s;
     }
 
     .message-bubble::after {
@@ -376,32 +477,25 @@
       bottom: -15px;
       left: 50%;
       transform: translateX(-50%);
-      width: 0;
-      height: 0;
+      width: 0; height: 0;
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
       border-top: 15px solid white;
+      transition: border-top-color 0.6s;
     }
 
-    .message-quote {
-      font-size: 1.3rem;
-      font-weight: 700;
-      line-height: 1.8;
-    }
+    .message-quote { font-size: 1.3rem; font-weight: 700; line-height: 1.8; }
 
-    .message-from {
-      margin-top: 1.5rem;
-      font-size: 0.95rem;
-      color: #b08040;
-    }
+    .message-from { margin-top: 1.5rem; font-size: 0.95rem; color: #b08040; transition: color 0.6s; }
 
-    /* ── Footer ── */
+    /* ══ Footer ══ */
     footer {
       text-align: center;
       padding: 2rem;
       font-size: 0.85rem;
       color: #b08040;
       background: #fdf6ec;
+      transition: background 0.6s, color 0.6s;
     }
 
     .footer-paw {
@@ -412,19 +506,16 @@
 
     .footer-paw:hover { transform: scale(1.2); }
 
-    /* ── Scroll animation ── */
+    /* ══ Scroll animation ══ */
     .reveal {
       opacity: 0;
       transform: translateY(30px);
       transition: opacity 0.8s, transform 0.8s;
     }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── Fart Storm ── */
+    /* ══ Fart Storm ══ */
     .fart-cloud {
       position: fixed;
       font-size: 3rem;
@@ -439,9 +530,7 @@
       100% { opacity: 0; transform: scale(2.5) rotate(360deg) translateY(-100px); }
     }
 
-    .screen-shake {
-      animation: shake 0.5s ease-in-out;
-    }
+    .screen-shake { animation: shake 0.5s ease-in-out; }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -449,7 +538,7 @@
       30%, 70% { transform: translateX(5px); }
     }
 
-    /* ── Konami / Shigeo Mode ── */
+    /* ══ Konami / Shigeo Mode ══ */
     .shigeo-mode {
       position: fixed;
       inset: 0;
@@ -465,10 +554,7 @@
       transition: opacity 0.6s;
     }
 
-    .shigeo-mode.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .shigeo-mode.active { opacity: 1; pointer-events: auto; }
 
     .shigeo-mode h2 {
       font-size: clamp(2rem, 8vw, 5rem);
@@ -477,10 +563,7 @@
       margin-bottom: 1rem;
     }
 
-    .shigeo-mode p {
-      font-size: 1.5rem;
-      color: white;
-    }
+    .shigeo-mode p { font-size: 1.5rem; color: white; }
 
     .shigeo-mode .close-btn {
       margin-top: 2rem;
@@ -511,7 +594,7 @@
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
     }
 
-    /* ── Natto Game ── */
+    /* ══ Natto Game ══ */
     .game-overlay {
       position: fixed;
       inset: 0;
@@ -535,10 +618,7 @@
       backdrop-filter: blur(10px);
     }
 
-    .game-hud span {
-      font-size: 1.2rem;
-      font-weight: 900;
-    }
+    .game-hud span { font-size: 1.2rem; font-weight: 900; }
 
     .game-close {
       background: #e74c3c;
@@ -552,12 +632,7 @@
       cursor: pointer;
     }
 
-    .game-area {
-      flex: 1;
-      width: 100%;
-      position: relative;
-      overflow: hidden;
-    }
+    .game-area { flex: 1; width: 100%; position: relative; overflow: hidden; }
 
     .game-player {
       position: absolute;
@@ -601,18 +676,8 @@
     }
 
     .game-over-screen.active { display: flex; }
-
-    .game-over-screen h3 {
-      color: white;
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .game-over-screen p {
-      color: #ffd6a5;
-      font-size: 1.3rem;
-      margin-bottom: 1.5rem;
-    }
+    .game-over-screen h3 { color: white; font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .game-over-screen p { color: #ffd6a5; font-size: 1.3rem; margin-bottom: 1.5rem; }
 
     .game-over-screen button {
       padding: 0.8rem 2.5rem;
@@ -630,7 +695,7 @@
 
     .game-over-screen button:hover { transform: scale(1.05); }
 
-    /* ── Secret Hint ── */
+    /* ══ Secret Hint ══ */
     .secret-hint {
       position: fixed;
       bottom: 1rem;
@@ -641,12 +706,245 @@
       pointer-events: none;
       transition: opacity 0.5s;
     }
+
+    /* ══ Running Mari ══ */
+    .running-mari {
+      position: fixed;
+      font-size: 4rem;
+      z-index: 4000;
+      pointer-events: none;
+      animation: runAcross 3s linear forwards;
+    }
+
+    @keyframes runAcross {
+      0% { left: -100px; transform: scaleX(1); }
+      45% { transform: scaleX(1); }
+      50% { left: 110vw; transform: scaleX(1); }
+      51% { transform: scaleX(-1); }
+      100% { left: -100px; transform: scaleX(-1); }
+    }
+
+    .running-trail {
+      position: fixed;
+      font-size: 1.2rem;
+      pointer-events: none;
+      z-index: 3999;
+      animation: trailFade 1s ease-out forwards;
+    }
+
+    @keyframes trailFade {
+      0% { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.3) translateY(10px); }
+    }
+
+    /* ══ Natto Matrix Rain ══ */
+    .natto-rain-col {
+      position: fixed;
+      top: -50px;
+      font-size: 1.8rem;
+      pointer-events: none;
+      z-index: 4500;
+      animation: nattoFall linear forwards;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @keyframes nattoFall {
+      0% { transform: translateY(-100px); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0.2; }
+    }
+
+    /* ══ Love Letter ══ */
+    .love-letter {
+      position: fixed;
+      inset: 0;
+      z-index: 6000;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
+
+    .love-letter.active { opacity: 1; pointer-events: auto; }
+
+    .letter-paper {
+      background: #fefae0;
+      border-radius: 16px;
+      padding: 3rem;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+      transform: rotate(-2deg);
+      border: 1px solid #ddd5b0;
+    }
+
+    .letter-paper::before {
+      content: '💌';
+      position: absolute;
+      top: -20px;
+      right: -10px;
+      font-size: 2.5rem;
+    }
+
+    .letter-paper h3 {
+      font-size: 1.4rem;
+      color: #c0392b;
+      margin-bottom: 1rem;
+    }
+
+    .letter-paper p {
+      font-size: 1rem;
+      line-height: 2;
+      color: #5a4a3a;
+    }
+
+    .letter-paper .letter-sign {
+      text-align: right;
+      margin-top: 1.5rem;
+      font-weight: 900;
+      color: #c0392b;
+    }
+
+    .letter-close {
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .letter-close button {
+      background: #c0392b;
+      color: white;
+      border: none;
+      padding: 0.6rem 2rem;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .letter-close button:hover { transform: scale(1.05); }
+
+    /* ══ Paw Trail ══ */
+    .paw-trail {
+      position: fixed;
+      font-size: 1rem;
+      pointer-events: none;
+      z-index: 998;
+      opacity: 0.5;
+      animation: pawFade 1.2s ease-out forwards;
+    }
+
+    @keyframes pawFade {
+      0% { opacity: 0.5; transform: scale(1) rotate(var(--rot)); }
+      100% { opacity: 0; transform: scale(0.5) rotate(var(--rot)); }
+    }
+
+    /* ══ Right-Click Menu ══ */
+    .custom-menu {
+      position: fixed;
+      background: white;
+      border-radius: 16px;
+      padding: 0.5rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      z-index: 7000;
+      min-width: 200px;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.15s, transform 0.15s;
+      pointer-events: none;
+      border: 1px solid rgba(200,150,80,0.15);
+    }
+
+    .custom-menu.show { opacity: 1; transform: scale(1); pointer-events: auto; }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #4a3728;
+      transition: background 0.15s;
+    }
+
+    .menu-item:hover { background: #fdf6ec; }
+    .menu-item .mi-icon { font-size: 1.3rem; }
+    .menu-divider { height: 1px; background: #eee; margin: 0.3rem 0.5rem; }
+
+    /* ══ Achievement Badge ══ */
+    .achievement {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: linear-gradient(135deg, #ffd700, #ffaa00);
+      color: #4a3728;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 900;
+      font-size: 1rem;
+      box-shadow: 0 8px 30px rgba(255,170,0,0.3);
+      z-index: 8000;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      white-space: nowrap;
+    }
+
+    .achievement.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ══ Spin animation ══ */
+    @keyframes spin360 {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ══ Secret page (extreme scroll) ══ */
+    .secret-bottom {
+      text-align: center;
+      padding: 1rem 2rem 0.5rem;
+      font-size: 0.7rem;
+      color: transparent;
+      transition: color 0.5s;
+      cursor: default;
+      user-select: none;
+    }
+
+    .secret-bottom:hover { color: rgba(176,128,64,0.4); }
+
+    /* ══ Disco Mode ══ */
+    @keyframes discoFlash {
+      0% { background: #ff6b6b; }
+      16% { background: #ffd93d; }
+      33% { background: #6bcb77; }
+      50% { background: #4d96ff; }
+      66% { background: #9b59b6; }
+      83% { background: #ff6b6b; }
+      100% { background: #ffd93d; }
+    }
+
+    body.disco-mode { animation: discoFlash 2s linear infinite; }
+    body.disco-mode * { transition: none !important; }
   </style>
 </head>
 <body>
 
+  <!-- Stars (night mode) -->
+  <div class="stars-container" id="starsContainer"></div>
+
   <!-- Pet Counter -->
   <div class="pet-counter" id="petCounter">🐾 なでなで: <span id="petCount">0</span>回</div>
+
+  <!-- Night Mode Indicator -->
+  <div class="night-toggle-indicator" id="nightIndicator"></div>
 
   <!-- Pet Milestone Toast -->
   <div class="pet-toast" id="petToast">
@@ -657,11 +955,14 @@
   <!-- Hero -->
   <div class="hero">
     <div class="hero-content">
-      <div class="dog-illustration" id="mariPhoto" title="マリをなでなでしてね！"><img src="mari.png" alt="マリ - ヨークシャテリア"></div>
+      <div class="dog-illustration" id="mariPhoto" title="マリをなでなでしてね！">
+        <img src="mari.png" alt="マリ - ヨークシャテリア">
+        <div class="sleep-overlay" id="sleepOverlay"><span class="zzz">💤</span></div>
+      </div>
       <div class="paw-prints">🐾 🐾 🐾</div>
-      <h1>マリ</h1>
+      <h1 id="heroTitle">マリ</h1>
       <p class="subtitle">Takashiの愛犬</p>
-      <span class="breed">🎀 ヨークシャテリア</span>
+      <span class="breed" id="breedBadge">🎀 ヨークシャテリア</span>
     </div>
     <div class="scroll-hint">↓ スクロールしてマリを知ろう ↓</div>
   </div>
@@ -673,45 +974,27 @@
       <div class="profile-grid">
         <div class="profile-item">
           <span class="profile-icon">🐕</span>
-          <div>
-            <div class="profile-label">なまえ</div>
-            <div class="profile-value">マリ</div>
-          </div>
+          <div><div class="profile-label">なまえ</div><div class="profile-value">マリ</div></div>
         </div>
         <div class="profile-item">
           <span class="profile-icon">🏷️</span>
-          <div>
-            <div class="profile-label">犬種</div>
-            <div class="profile-value">ヨークシャテリア</div>
-          </div>
+          <div><div class="profile-label">犬種</div><div class="profile-value">ヨークシャテリア</div></div>
         </div>
         <div class="profile-item">
           <span class="profile-icon">👨</span>
-          <div>
-            <div class="profile-label">飼い主</div>
-            <div class="profile-value">Takashi</div>
-          </div>
+          <div><div class="profile-label">飼い主</div><div class="profile-value">Takashi</div></div>
         </div>
         <div class="profile-item">
           <span class="profile-icon">💖</span>
-          <div>
-            <div class="profile-label">大好きな人</div>
-            <div class="profile-value">しげお</div>
-          </div>
+          <div><div class="profile-label">大好きな人</div><div class="profile-value">しげお</div></div>
         </div>
         <div class="profile-item">
           <span class="profile-icon">🍽️</span>
-          <div>
-            <div class="profile-label">好きな食べ物</div>
-            <div class="profile-value">納豆</div>
-          </div>
+          <div><div class="profile-label">好きな食べ物</div><div class="profile-value">納豆</div></div>
         </div>
         <div class="profile-item">
           <span class="profile-icon">✨</span>
-          <div>
-            <div class="profile-label">特技</div>
-            <div class="profile-value">おなら</div>
-          </div>
+          <div><div class="profile-label">特技</div><div class="profile-value">おなら</div></div>
         </div>
       </div>
     </div>
@@ -766,8 +1049,11 @@
 
   <!-- Footer -->
   <footer>
-    <p><span class="footer-paw" id="footerPaw" title="🐾">🐾</span> Mari the Yorkshire Terrier &copy; Takashi <span class="footer-paw" id="footerPaw2" title="🐾">🐾</span></p>
+    <p><span class="footer-paw" id="footerPaw">🐾</span> Mari the Yorkshire Terrier &copy; Takashi <span class="footer-paw" id="footerPaw2">🐾</span></p>
   </footer>
+
+  <!-- Secret bottom text -->
+  <div class="secret-bottom" id="secretBottom">このサイトには全部で12個の隠し要素があるよ。全部見つけられるかな？</div>
 
   <!-- Shigeo Mode Overlay -->
   <div class="shigeo-mode" id="shigeoMode">
@@ -776,7 +1062,45 @@
     <button class="close-btn" onclick="closeShigeoMode()">わかった！ わん！</button>
   </div>
 
-  <!-- Natto Catcher Game -->
+  <!-- Love Letter Overlay -->
+  <div class="love-letter" id="loveLetter">
+    <div class="letter-paper">
+      <h3>しげおへ 💌</h3>
+      <p>
+        しげお、いつもそばにいてくれてありがとう。<br><br>
+        ぼくがおならしても笑ってくれるし、<br>
+        納豆を分けてくれるし、<br>
+        なでなでしてくれるし、<br>
+        お散歩にも連れてってくれるし。<br><br>
+        しげおがいない日は、ぼくの世界は<br>
+        ちょっとだけ色あせちゃうんだ。<br><br>
+        でもしげおが帰ってきたら、<br>
+        ぼくの世界はまた虹色になるよ。<br><br>
+        ずっとずっと大好き。わん。
+      </p>
+      <div class="letter-sign">マリ 🐾</div>
+      <div class="letter-close">
+        <button onclick="document.getElementById('loveLetter').classList.remove('active')">そっと閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Right-Click Menu -->
+  <div class="custom-menu" id="customMenu">
+    <div class="menu-item" onclick="menuAction('pet')"><span class="mi-icon">🐾</span>マリをなでる</div>
+    <div class="menu-item" onclick="menuAction('natto')"><span class="mi-icon">🫘</span>納豆をあげる</div>
+    <div class="menu-item" onclick="menuAction('fart')"><span class="mi-icon">💨</span>おならさせる</div>
+    <div class="menu-divider"></div>
+    <div class="menu-item" onclick="menuAction('night')"><span class="mi-icon">🌙</span>夜モード切替</div>
+    <div class="menu-item" onclick="menuAction('disco')"><span class="mi-icon">🪩</span>ディスコモード</div>
+    <div class="menu-divider"></div>
+    <div class="menu-item" onclick="menuAction('hint')"><span class="mi-icon">❓</span>隠し要素のヒント</div>
+  </div>
+
+  <!-- Achievement -->
+  <div class="achievement" id="achievement"></div>
+
+  <!-- Natto Game -->
   <div class="game-overlay" id="gameOverlay">
     <div class="game-hud">
       <span>🫘 スコア: <span id="gameScore">0</span></span>
@@ -801,33 +1125,67 @@
   <div class="secret-hint" id="secretHint"></div>
 
   <script>
-    /* ── Scroll Reveal ── */
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
+    /* ══ Achievements tracker ══ */
+    const discovered = new Set();
+    function unlock(id, label) {
+      if (discovered.has(id)) return;
+      discovered.add(id);
+      const badge = document.getElementById('achievement');
+      badge.textContent = '🏅 発見！ ' + label + '（' + discovered.size + '/12）';
+      badge.classList.add('show');
+      setTimeout(() => badge.classList.remove('show'), 3000);
+    }
+
+    /* ══ Generate stars for night mode ══ */
+    (function() {
+      const c = document.getElementById('starsContainer');
+      for (let i = 0; i < 80; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.animationDelay = Math.random() * 2 + 's';
+        s.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+        s.style.width = s.style.height = (2 + Math.random() * 3) + 'px';
+        c.appendChild(s);
+      }
+    })();
+
+    /* ══ Scroll Reveal ══ */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    /* ══════════════════════════════════════
+    /* ══ Toast helper ══ */
+    function showToast(emoji, text) {
+      const toast = document.getElementById('petToast');
+      document.getElementById('toastEmoji').textContent = emoji;
+      document.getElementById('toastText').textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    /* ══════════════════════════════════════════
        1. なでなで（Pet Mari）
-       ══════════════════════════════════════ */
+       ══════════════════════════════════════════ */
     let petCount = 0;
     const petMilestones = {
       1:   { emoji: '🥰', text: 'マリが嬉しそう！' },
       5:   { emoji: '💕', text: 'マリがしっぽを振っている！' },
       10:  { emoji: '🎉', text: '10回なでなで達成！マリ大喜び！' },
       25:  { emoji: '👑', text: 'なでなでマスター！マリの親友だ！' },
-      50:  { emoji: '🏆', text: '50回！！マリが最高に幸せ！\nヒント: フッターの🐾を5回タップしてみて…' },
+      50:  { emoji: '🏆', text: '50回！マリが最高に幸せ！' },
       100: { emoji: '🌟', text: '伝説のなでなで師！100回達成！！' },
     };
 
     document.getElementById('mariPhoto').addEventListener('click', (e) => {
+      wakeMari();
       petCount++;
       document.getElementById('petCount').textContent = petCount;
       document.getElementById('petCounter').classList.add('show');
+      unlock('pet', 'なでなで');
 
-      // Float hearts
       const hearts = ['❤️','💖','💕','💗','🩷','🐾'];
       for (let i = 0; i < 3; i++) {
         setTimeout(() => {
@@ -841,48 +1199,33 @@
         }, i * 100);
       }
 
-      // Wiggle animation
       const photo = e.currentTarget;
       photo.style.animation = 'none';
       photo.offsetHeight;
       photo.style.animation = 'float 3s ease-in-out infinite';
 
-      // Milestones
       if (petMilestones[petCount]) {
         showToast(petMilestones[petCount].emoji, petMilestones[petCount].text);
       }
     });
 
-    function showToast(emoji, text) {
-      const toast = document.getElementById('petToast');
-      document.getElementById('toastEmoji').textContent = emoji;
-      document.getElementById('toastText').textContent = text;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    /* ══════════════════════════════════════
-       2. おならストーム（Fart Card Easter Egg）
-       ══════════════════════════════════════ */
-    let fartClicks = 0;
-    let fartTimer = null;
+    /* ══════════════════════════════════════════
+       2. おならストーム（Fart Card x5）
+       ══════════════════════════════════════════ */
+    let fartClicks = 0, fartTimer = null;
     document.getElementById('factFart').addEventListener('click', () => {
       fartClicks++;
       clearTimeout(fartTimer);
       fartTimer = setTimeout(() => fartClicks = 0, 2000);
-
-      if (fartClicks >= 5) {
-        fartClicks = 0;
-        triggerFartStorm();
-      }
+      if (fartClicks >= 5) { fartClicks = 0; triggerFartStorm(); }
     });
 
     function triggerFartStorm() {
+      unlock('fart', 'おならストーム');
       document.body.classList.add('screen-shake');
       setTimeout(() => document.body.classList.remove('screen-shake'), 500);
-
       const farts = ['💨','💨','💨','😤','🌀','💥','😂'];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 25; i++) {
         setTimeout(() => {
           const f = document.createElement('div');
           f.className = 'fart-cloud';
@@ -896,10 +1239,11 @@
       showToast('💨', 'おならストーム発動！！！');
     }
 
-    /* ══════════════════════════════════════
+    /* ══════════════════════════════════════════
        3. ハート爆発（Love Heart Double-Click）
-       ══════════════════════════════════════ */
+       ══════════════════════════════════════════ */
     document.getElementById('loveHeart').addEventListener('dblclick', () => {
+      unlock('heartboom', 'ハート爆発');
       const hearts = ['❤️','💖','💕','💗','💘','💝','🩷','🧡','💛'];
       for (let i = 0; i < 40; i++) {
         setTimeout(() => {
@@ -915,29 +1259,282 @@
       }
     });
 
-    /* ══════════════════════════════════════
+    /* ══════════════════════════════════════════
        4. コナミコマンド → しげおモード
-       ══════════════════════════════════════ */
+       ══════════════════════════════════════════ */
     const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight'];
     let konamiIndex = 0;
 
+    /* ══════════════════════════════════════════
+       5. 納豆キャッチゲーム（Footer Paw x5）
+       ══════════════════════════════════════════ */
+    let pawClicks = 0, pawTimer = null;
+    document.getElementById('footerPaw').addEventListener('click', handlePawClick);
+    document.getElementById('footerPaw2').addEventListener('click', handlePawClick);
+
+    function handlePawClick() {
+      pawClicks++;
+      clearTimeout(pawTimer);
+      pawTimer = setTimeout(() => pawClicks = 0, 2000);
+      if (pawClicks === 3) {
+        document.getElementById('secretHint').textContent = 'あと2回…';
+        document.getElementById('secretHint').style.opacity = '1';
+      }
+      if (pawClicks >= 5) {
+        pawClicks = 0;
+        document.getElementById('secretHint').style.opacity = '0';
+        unlock('game', '納豆キャッチゲーム');
+        startGame();
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       6. "mari" タイプ → マリが走る
+       ══════════════════════════════════════════ */
+    let typedWord = '';
+    const secretWords = { mari: 'runMari', natto: 'nattoRain', shigeo: 'showLoveLetter', disco: 'toggleDisco', wan: 'mariBarks' };
+
     document.addEventListener('keydown', (e) => {
       if (document.getElementById('gameOverlay').classList.contains('active')) return;
+
+      // Konami
       if (e.key === konamiCode[konamiIndex]) {
         konamiIndex++;
-        if (konamiIndex === konamiCode.length) {
-          konamiIndex = 0;
-          activateShigeoMode();
-        }
-      } else {
+        if (konamiIndex === konamiCode.length) { konamiIndex = 0; activateShigeoMode(); }
+      } else if (konamiCode.indexOf(e.key) >= 0) {
         konamiIndex = 0;
+      }
+
+      // Word detection
+      if (e.key.length === 1 && /[a-z]/i.test(e.key)) {
+        typedWord += e.key.toLowerCase();
+        if (typedWord.length > 10) typedWord = typedWord.slice(-10);
+        for (const [word, action] of Object.entries(secretWords)) {
+          if (typedWord.endsWith(word)) {
+            typedWord = '';
+            window[action]();
+            break;
+          }
+        }
       }
     });
 
+    function runMari() {
+      unlock('run', 'マリダッシュ');
+      const m = document.createElement('div');
+      m.className = 'running-mari';
+      m.textContent = '🐕';
+      m.style.top = (30 + Math.random() * 40) + 'vh';
+      document.body.appendChild(m);
+
+      let trailCount = 0;
+      const trailInterval = setInterval(() => {
+        const t = document.createElement('div');
+        t.className = 'running-trail';
+        t.textContent = '🐾';
+        t.style.left = m.getBoundingClientRect().left + 'px';
+        t.style.top = (parseFloat(m.style.top) || 50) + 'vh';
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 1000);
+        trailCount++;
+        if (trailCount > 30) clearInterval(trailInterval);
+      }, 100);
+
+      setTimeout(() => { m.remove(); clearInterval(trailInterval); }, 3000);
+      showToast('🐕💨', 'マリが走り回ってる！');
+    }
+
+    /* ══════════════════════════════════════════
+       7. "natto" タイプ → 納豆マトリックス
+       ══════════════════════════════════════════ */
+    function nattoRain() {
+      unlock('nattorain', '納豆マトリックス');
+      const items = ['🫘','🫘','🫘','🍚','🥢'];
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          const col = document.createElement('div');
+          col.className = 'natto-rain-col';
+          col.style.left = Math.random() * 100 + 'vw';
+          col.style.animationDuration = (2 + Math.random() * 3) + 's';
+          const count = 3 + Math.floor(Math.random() * 5);
+          for (let j = 0; j < count; j++) {
+            const span = document.createElement('span');
+            span.textContent = items[Math.floor(Math.random() * items.length)];
+            col.appendChild(span);
+          }
+          document.body.appendChild(col);
+          setTimeout(() => col.remove(), 5000);
+        }, i * 150);
+      }
+      showToast('🫘', '納豆マトリックス！！');
+    }
+
+    /* ══════════════════════════════════════════
+       8. "shigeo" タイプ → ラブレター
+       ══════════════════════════════════════════ */
+    function showLoveLetter() {
+      unlock('letter', 'しげおへのラブレター');
+      document.getElementById('loveLetter').classList.add('active');
+    }
+
+    /* ══════════════════════════════════════════
+       9. "wan" タイプ → マリが吠える
+       ══════════════════════════════════════════ */
+    function mariBarks() {
+      unlock('bark', 'わん！');
+      const barks = ['わん！','わんわん！','くぅ〜ん','きゃん！','ワオーン！'];
+      const b = document.createElement('div');
+      b.className = 'float-emoji';
+      b.textContent = barks[Math.floor(Math.random() * barks.length)];
+      b.style.left = '50%';
+      b.style.top = '40%';
+      b.style.fontSize = '3rem';
+      b.style.textShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 1500);
+    }
+
+    /* ══════════════════════════════════════════
+       10. タイトル「マリ」3回クリック → 夜モード
+       ══════════════════════════════════════════ */
+    let titleClicks = 0, titleTimer = null;
+    document.getElementById('heroTitle').addEventListener('click', () => {
+      titleClicks++;
+      clearTimeout(titleTimer);
+      titleTimer = setTimeout(() => titleClicks = 0, 1500);
+      if (titleClicks >= 3) {
+        titleClicks = 0;
+        toggleNightMode();
+      }
+    });
+
+    function toggleNightMode() {
+      document.body.classList.toggle('night-mode');
+      const isNight = document.body.classList.contains('night-mode');
+      unlock('night', isNight ? '夜モード' : '昼モード');
+      const ind = document.getElementById('nightIndicator');
+      ind.textContent = isNight ? '🌙' : '☀️';
+      ind.classList.add('show');
+      setTimeout(() => ind.classList.remove('show'), 2000);
+      showToast(isNight ? '🌙' : '☀️', isNight ? 'おやすみモード…' : 'おはようモード！');
+    }
+
+    /* ══════════════════════════════════════════
+       11. 写真ダブルクリック → フィルター切替
+       ══════════════════════════════════════════ */
+    const filters = ['filter-none','filter-sepia','filter-grayscale','filter-hue','filter-saturate','filter-invert','filter-blur'];
+    const filterNames = ['ノーマル','セピア','モノクロ','カラーシフト','ビビッド','反転','ぼかし'];
+    let filterIndex = 0;
+
+    document.getElementById('mariPhoto').addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      filterIndex = (filterIndex + 1) % filters.length;
+      const photo = document.getElementById('mariPhoto');
+      filters.forEach(f => photo.classList.remove(f));
+      photo.classList.add(filters[filterIndex]);
+      unlock('filter', 'フォトフィルター');
+      showToast('📸', 'フィルター: ' + filterNames[filterIndex]);
+    });
+
+    /* ══════════════════════════════════════════
+       12. 犬種バッジクリック → 肉球カーソルトレイル
+       ══════════════════════════════════════════ */
+    let pawTrailActive = false;
+    document.getElementById('breedBadge').addEventListener('click', () => {
+      pawTrailActive = !pawTrailActive;
+      unlock('pawtrail', '肉球トレイル');
+      showToast('🐾', pawTrailActive ? '肉球トレイル ON！' : '肉球トレイル OFF');
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!pawTrailActive) return;
+      if (Math.random() > 0.3) return;
+      const p = document.createElement('div');
+      p.className = 'paw-trail';
+      p.textContent = '🐾';
+      p.style.left = (e.clientX - 8) + 'px';
+      p.style.top = (e.clientY - 8) + 'px';
+      p.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 1200);
+    });
+
+    /* ══════════════════════════════════════════
+       13. 右クリックメニュー
+       ══════════════════════════════════════════ */
+    const customMenu = document.getElementById('customMenu');
+    document.addEventListener('contextmenu', (e) => {
+      if (document.getElementById('gameOverlay').classList.contains('active')) return;
+      e.preventDefault();
+      customMenu.style.left = Math.min(e.clientX, window.innerWidth - 220) + 'px';
+      customMenu.style.top = Math.min(e.clientY, window.innerHeight - 280) + 'px';
+      customMenu.classList.add('show');
+      unlock('menu', '隠しメニュー');
+    });
+
+    document.addEventListener('click', () => customMenu.classList.remove('show'));
+
+    function menuAction(action) {
+      customMenu.classList.remove('show');
+      switch(action) {
+        case 'pet':
+          petCount++; document.getElementById('petCount').textContent = petCount;
+          document.getElementById('petCounter').classList.add('show');
+          showToast('🥰', 'マリをなでなで！');
+          break;
+        case 'natto': nattoRain(); break;
+        case 'fart': triggerFartStorm(); break;
+        case 'night': toggleNightMode(); break;
+        case 'disco': toggleDisco(); break;
+        case 'hint': showRandomHint(); break;
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       14. ディスコモード
+       ══════════════════════════════════════════ */
+    let discoActive = false;
+    function toggleDisco() {
+      discoActive = !discoActive;
+      document.body.classList.toggle('disco-mode', discoActive);
+      unlock('disco', 'ディスコモード');
+      showToast('🪩', discoActive ? 'ディスコタイム！！' : 'ディスコ終了！');
+      if (discoActive) {
+        setTimeout(() => {
+          discoActive = false;
+          document.body.classList.remove('disco-mode');
+        }, 8000);
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       15. マリ居眠り（30秒放置）
+       ══════════════════════════════════════════ */
+    let sleepTimer;
+    function resetSleep() {
+      clearTimeout(sleepTimer);
+      wakeMari();
+      sleepTimer = setTimeout(() => {
+        document.getElementById('sleepOverlay').classList.add('active');
+        unlock('sleep', 'おやすみマリ');
+      }, 30000);
+    }
+
+    function wakeMari() {
+      document.getElementById('sleepOverlay').classList.remove('active');
+    }
+
+    document.addEventListener('mousemove', resetSleep);
+    document.addEventListener('scroll', resetSleep);
+    document.addEventListener('click', resetSleep);
+    document.addEventListener('keydown', resetSleep);
+    resetSleep();
+
+    /* ══ Shigeo Mode ══ */
     function activateShigeoMode() {
+      unlock('konami', 'しげおモード');
       const overlay = document.getElementById('shigeoMode');
       overlay.classList.add('active');
-      // Rain hearts
       for (let i = 0; i < 50; i++) {
         setTimeout(() => {
           const h = document.createElement('div');
@@ -952,36 +1549,49 @@
       }
     }
 
-    function closeShigeoMode() {
-      document.getElementById('shigeoMode').classList.remove('active');
+    function closeShigeoMode() { document.getElementById('shigeoMode').classList.remove('active'); }
+
+    /* ══ Random Hints ══ */
+    const hints = [
+      'マリの写真をクリックしてみて',
+      'マリの写真をダブルクリックすると…',
+      '「マリ」のタイトルを3回クリック',
+      'おならカードを5回連打してみて',
+      '❤️をダブルクリックすると…',
+      'フッターの🐾を5回タップ',
+      '犬種バッジをクリックしてから動かしてみて',
+      'キーボードで「mari」と入力',
+      'キーボードで「natto」と入力',
+      'キーボードで「shigeo」と入力',
+      'キーボードで「wan」と入力',
+      '右クリックメニューにディスコが…',
+      'コナミコマンド: ↑↑↓↓←→←→',
+      '30秒放置するとマリが…',
+      'ページの一番下を見てみて',
+    ];
+
+    function showRandomHint() {
+      const hint = hints[Math.floor(Math.random() * hints.length)];
+      showToast('💡', hint);
     }
 
-    /* ══════════════════════════════════════
-       5. 納豆キャッチゲーム（Footer Paw Secret）
-       ══════════════════════════════════════ */
-    let pawClicks = 0;
-    let pawTimer = null;
-
-    document.getElementById('footerPaw').addEventListener('click', handlePawClick);
-    document.getElementById('footerPaw2').addEventListener('click', handlePawClick);
-
-    function handlePawClick() {
-      pawClicks++;
-      clearTimeout(pawTimer);
-      pawTimer = setTimeout(() => pawClicks = 0, 2000);
-
-      if (pawClicks === 3) {
-        document.getElementById('secretHint').textContent = 'あと2回…';
-        document.getElementById('secretHint').style.opacity = '1';
-      }
-      if (pawClicks >= 5) {
-        pawClicks = 0;
-        document.getElementById('secretHint').style.opacity = '0';
-        startGame();
-      }
+    /* ══ Idle hint ══ */
+    let idleTimer;
+    function resetIdle() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        const hint = document.getElementById('secretHint');
+        const randomHints = ['マリの写真をタップしてみて…', '右クリックしてみて…', 'キーボードで何か入力してみて…'];
+        hint.textContent = 'ヒント: ' + randomHints[Math.floor(Math.random() * randomHints.length)];
+        hint.style.opacity = '1';
+        setTimeout(() => hint.style.opacity = '0', 4000);
+      }, 20000);
     }
+    resetIdle();
 
-    /* ── Natto Catcher Game Engine ── */
+    /* ══════════════════════════════════════════
+       Natto Catcher Game Engine
+       ══════════════════════════════════════════ */
     let gameState = null;
 
     function startGame() {
@@ -989,43 +1599,22 @@
       overlay.classList.add('active');
       document.getElementById('gameOver').classList.remove('active');
 
-      gameState = {
-        score: 0,
-        lives: 3,
-        time: 30,
-        running: true,
-        playerX: 50,
-        items: [],
-        speed: 2,
-        spawnRate: 800,
-        lastSpawn: 0,
-        animFrame: null,
-        timerInterval: null,
-      };
+      gameState = { score:0, lives:3, time:30, running:true, playerX:50, speed:2, spawnRate:800, lastSpawn:0, animFrame:null, timerInterval:null };
 
       document.getElementById('gameScore').textContent = '0';
       document.getElementById('gameLives').textContent = '3';
       document.getElementById('gameTime').textContent = '30';
-
-      // Clear old items
       document.querySelectorAll('.game-item, .game-splash').forEach(el => el.remove());
 
-      // Position player
       const player = document.getElementById('gamePlayer');
       const area = document.getElementById('gameArea');
       player.style.left = '50%';
       player.style.transform = 'translateX(-50%)';
 
-      // Controls
       const moveHandler = (e) => {
         if (!gameState || !gameState.running) return;
         const rect = area.getBoundingClientRect();
-        let x;
-        if (e.touches) {
-          x = e.touches[0].clientX - rect.left;
-        } else {
-          x = e.clientX - rect.left;
-        }
+        const x = e.touches ? e.touches[0].clientX - rect.left : e.clientX - rect.left;
         const pct = Math.max(5, Math.min(95, (x / rect.width) * 100));
         gameState.playerX = pct;
         player.style.left = pct + '%';
@@ -1045,50 +1634,35 @@
       gameState._moveHandler = moveHandler;
       gameState._keyHandler = keyHandler;
 
-      // Timer
       gameState.timerInterval = setInterval(() => {
         if (!gameState || !gameState.running) return;
         gameState.time--;
         document.getElementById('gameTime').textContent = gameState.time;
-        // Speed up over time
         if (gameState.time <= 20) gameState.speed = 2.5;
         if (gameState.time <= 10) { gameState.speed = 3.5; gameState.spawnRate = 500; }
         if (gameState.time <= 0) endGame(true);
       }, 1000);
 
-      // Game loop
-      let lastTime = 0;
       function gameLoop(timestamp) {
         if (!gameState || !gameState.running) return;
+        if (timestamp - gameState.lastSpawn > gameState.spawnRate) { spawnItem(); gameState.lastSpawn = timestamp; }
 
-        // Spawn items
-        if (timestamp - gameState.lastSpawn > gameState.spawnRate) {
-          spawnItem();
-          gameState.lastSpawn = timestamp;
-        }
-
-        // Move items
         const areaRect = area.getBoundingClientRect();
-        const playerEl = document.getElementById('gamePlayer');
-        const playerRect = playerEl.getBoundingClientRect();
+        const playerRect = player.getBoundingClientRect();
 
         document.querySelectorAll('.game-item').forEach(item => {
           let y = parseFloat(item.dataset.y) + gameState.speed;
           item.dataset.y = y;
           item.style.top = y + 'px';
-
           const itemRect = item.getBoundingClientRect();
 
-          // Catch check
           if (y + 40 >= areaRect.height - 60 && y < areaRect.height - 10) {
-            const itemCenterX = itemRect.left + itemRect.width / 2;
-            const playerCenterX = playerRect.left + playerRect.width / 2;
-            if (Math.abs(itemCenterX - playerCenterX) < 40) {
-              const isGood = item.dataset.type === 'good';
-              if (isGood) {
-                gameState.score += item.dataset.item === 'natto' ? 10 : 5;
-                splashText(item, '+' + (item.dataset.item === 'natto' ? '10' : '5'), '#ff9800');
-              } else {
+            if (Math.abs((itemRect.left + itemRect.width/2) - (playerRect.left + playerRect.width/2)) < 40) {
+              if (item.dataset.type === 'good') {
+                const pts = item.dataset.item === 'natto' ? 10 : 5;
+                gameState.score += pts;
+                splashText(item, '+' + pts, '#ff9800');
+              } else if (item.dataset.type === 'fart') {
                 gameState.score += 20;
                 splashText(item, '💨 +20!!', '#e74c3c');
               }
@@ -1098,7 +1672,6 @@
             }
           }
 
-          // Missed
           if (y > areaRect.height) {
             if (item.dataset.type === 'good') {
               gameState.lives--;
@@ -1119,26 +1692,11 @@
       const area = document.getElementById('gameArea');
       const item = document.createElement('div');
       item.className = 'game-item';
-
       const rand = Math.random();
-      if (rand < 0.45) {
-        item.textContent = '🫘';
-        item.dataset.type = 'good';
-        item.dataset.item = 'natto';
-      } else if (rand < 0.7) {
-        item.textContent = '🍖';
-        item.dataset.type = 'good';
-        item.dataset.item = 'bone';
-      } else if (rand < 0.85) {
-        item.textContent = '💨';
-        item.dataset.type = 'fart';
-        item.dataset.item = 'fart';
-      } else {
-        item.textContent = '🧹';
-        item.dataset.type = 'bad';
-        item.dataset.item = 'broom';
-      }
-
+      if (rand < 0.45) { item.textContent = '🫘'; item.dataset.type = 'good'; item.dataset.item = 'natto'; }
+      else if (rand < 0.7) { item.textContent = '🍖'; item.dataset.type = 'good'; item.dataset.item = 'bone'; }
+      else if (rand < 0.85) { item.textContent = '💨'; item.dataset.type = 'fart'; item.dataset.item = 'fart'; }
+      else { item.textContent = '🧹'; item.dataset.type = 'bad'; item.dataset.item = 'broom'; }
       item.style.left = (10 + Math.random() * 80) + '%';
       item.dataset.y = -30;
       item.style.top = '-30px';
@@ -1146,14 +1704,14 @@
     }
 
     function splashText(item, text, color) {
-      const splash = document.createElement('div');
-      splash.className = 'game-splash';
-      splash.textContent = text;
-      splash.style.left = item.style.left;
-      splash.style.top = item.style.top;
-      splash.style.color = color;
-      document.getElementById('gameArea').appendChild(splash);
-      setTimeout(() => splash.remove(), 800);
+      const s = document.createElement('div');
+      s.className = 'game-splash';
+      s.textContent = text;
+      s.style.left = item.style.left;
+      s.style.top = item.style.top;
+      s.style.color = color;
+      document.getElementById('gameArea').appendChild(s);
+      setTimeout(() => s.remove(), 800);
     }
 
     function endGame(survived) {
@@ -1161,31 +1719,22 @@
       gameState.running = false;
       clearInterval(gameState.timerInterval);
       cancelAnimationFrame(gameState.animFrame);
-
       const area = document.getElementById('gameArea');
       area.removeEventListener('mousemove', gameState._moveHandler);
       area.removeEventListener('touchmove', gameState._moveHandler);
       document.removeEventListener('keydown', gameState._keyHandler);
 
-      const overScreen = document.getElementById('gameOver');
       const title = document.getElementById('gameOverTitle');
       const scoreText = document.getElementById('gameOverScore');
-
-      if (survived) {
-        title.textContent = gameState.score >= 200 ? '🏆 パーフェクト！！' : gameState.score >= 100 ? '🎉 すごい！' : '⏰ 時間切れ！';
-      } else {
-        title.textContent = '💔 ゲームオーバー！';
-      }
+      title.textContent = survived
+        ? (gameState.score >= 200 ? '🏆 パーフェクト！！' : gameState.score >= 100 ? '🎉 すごい！' : '⏰ 時間切れ！')
+        : '💔 ゲームオーバー！';
       scoreText.textContent = 'スコア: ' + gameState.score + '点';
-      overScreen.classList.add('active');
+      document.getElementById('gameOver').classList.add('active');
     }
 
     function restartGame() {
-      if (gameState) {
-        gameState.running = false;
-        clearInterval(gameState.timerInterval);
-        cancelAnimationFrame(gameState.animFrame);
-      }
+      if (gameState) { gameState.running = false; clearInterval(gameState.timerInterval); cancelAnimationFrame(gameState.animFrame); }
       document.querySelectorAll('.game-item, .game-splash').forEach(el => el.remove());
       startGame();
     }
@@ -1205,21 +1754,6 @@
       document.getElementById('gameOverlay').classList.remove('active');
       document.getElementById('gameOver').classList.remove('active');
     }
-
-    /* ── Secret hint fade-in after idle ── */
-    let idleTimer;
-    function resetIdle() {
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => {
-        const hint = document.getElementById('secretHint');
-        hint.textContent = 'ヒント: マリの写真をタップしてみて…';
-        hint.style.opacity = '1';
-        setTimeout(() => hint.style.opacity = '0', 4000);
-      }, 15000);
-    }
-    document.addEventListener('mousemove', resetIdle);
-    document.addEventListener('scroll', resetIdle);
-    resetIdle();
   </script>
 
 </body>
